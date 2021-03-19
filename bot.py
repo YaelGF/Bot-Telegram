@@ -1,6 +1,8 @@
 import sys 
 import os
+import requests
 import json
+import urllib
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 token = "1766275270:AAEtwSEQ7RIVCDQtLhpN-0kCxgb6IpOlJ-0"
@@ -44,9 +46,16 @@ def getImage(bot,update):
 
         file.download(filename)
 
-        result = requests.get("https://8080-copper-quail-f7bqyrmp.ws-us03.gitpod.io/cheese"+book_name)
+        url = "https://8080-copper-quail-f7bqyrmp.ws-us03.gitpod.io/cheese"
 
-        message ="Imagen guardada"
+        response = requests.post(url, myfile=filename)
+
+        cheese =  response.json()
+        
+        x = json.loads(cheese)
+
+        message = ["resultado"]
+
         update.message.reply_text(message)
 
     except Exception as e:
