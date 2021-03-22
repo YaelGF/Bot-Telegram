@@ -36,7 +36,7 @@ def help(bot,update):
 def getImage(bot,update):
     try:
 
-        message = "Recibiendo imagen"
+        message = "Procecando imagen"
         update.message.reply_text(message)
 
         file = bot.getFile(update.message.photo[-1].file_id)
@@ -46,20 +46,25 @@ def getImage(bot,update):
 
         file.download(filename)
 
-        url = "https://8080-copper-quail-f7bqyrmp.ws-us03.gitpod.io/cheese"
+        r = enviar(id)
 
-        response = requests.post(url, myfile=filename)
-
-        cheese =  response.json()
-        
-        x = json.loads(cheese)
-
-        message = ["resultado"]
-
-        update.message.reply_text(message)
+        update.message.reply_text(r)
 
     except Exception as e:
         print ("Error007: "+type(e).__name__)
+
+def enviar(id):
+    data2 = {'myfile': open('src/{}.jpg'.format(id), 'rb')}
+
+    url = "http://0.0.0.0:8080/cheese"
+
+    result = requests.post(url, files = data2)
+
+    res = result.json()
+
+    respuesta = res["resultado"]
+
+    return respuesta
 
 def error (bot, update, error):
     try:
