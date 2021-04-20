@@ -17,9 +17,28 @@ def start(bot,update):
     except Exception as e:
         print ("Error001: {}".format(error.args[0]))
 
+def classify(text):
+    key = "6a43a4d0-a16c-11eb-8949-e38b7f8620a092cad76a-6b83-47f4-a16d-f3cf88690412"
+    url = "https://machinelearningforkids.co.uk/api/scratch/"+ key + "/classify"
+
+    response = requests.get(url, params={ "data" : text })
+
+    if response.ok:
+        responseData = response.json()
+        topMatch = responseData[0]
+        return topMatch
+    else:
+        response.raise_for_status()
+
 def echo(bot,update):
     try:
-        update.message.reply_text(update.message.text)
+
+        text = update.message.text
+        demo = classify(text)
+        label = demo["class_name"]
+
+        message = "El genero de pelicula con el que se relaciona el texto es : %s" %(label)
+        update.message.reply_text(message)
 
     except Exception as e:
         print ("Error002: "+type(e).__name__)
@@ -27,7 +46,17 @@ def echo(bot,update):
 def help(bot,update):
     try:
 
-        message = "Puedes enviar texto o imagenes"
+        message = """Puedes encontrar que tipo de queso es entre:
+        gouda
+        mozzarella
+        parmesano
+        cheddar
+        emmental
+        brie
+        queso_azul
+        roquefort
+        macarpone
+        feta"""
         update.message.reply_text(message)
 
     except Exception as e:
